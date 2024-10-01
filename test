@@ -1,0 +1,5 @@
+Title: Low Privilege User Can Create Super Admin Account
+
+Description: A security vulnerability was identified where a user with low-level privileges can escalate their access and create a super admin account. This leads to a significant privilege escalation issue, allowing unauthorized users to gain full control over the system. The flaw potentially results from improper access control checks on user creation functionalities, exposing the system to malicious activity.
+
+Recommendation: Implement strict role-based access control (RBAC) checks to ensure only authorized users can create or modify super admin accounts. Regularly audit permissions and conduct security testing to prevent unauthorized privilege escalation.
