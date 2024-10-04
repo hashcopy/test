@@ -1,12 +1,12 @@
-Title: Privilege Escalation: Lower Privilege User Can Disable MFA via Super Admin URL
-Description: A lower privilege user can access and exploit a Super Admin feature to disable MFA during login. By directly updating the value in the Super Admin URL (intended for high-privilege users), the lower privilege user is able to disable MFA, even while they are still on the MFA setup page. This vulnerability allows the user to bypass security measures meant to enforce MFA, thus compromising the authentication process and exposing the application to unauthorized access.
+Title: Privilege Escalation: Low Privilege User Can View All Employer Data
+Description: A low privilege user is able to access sensitive employer data, which is meant to be restricted to Super Admins. By exploiting a vulnerability in the access control mechanism, the low privilege user can view data that should be inaccessible to them, such as personal or business details of all employers in the system. This improper privilege enforcement leads to a serious confidentiality breach.
 
 Impact:
 
-Users with lower privileges can perform high-privilege actions, such as disabling MFA.
-This can lead to unauthorized access, account compromise, and security breaches.
+Sensitive employer data, intended for Super Admin access, is exposed to lower privilege users.
+This could result in unauthorized data disclosure, privacy violations, and potential misuse of the information.
 Recommendation:
 
-Implement strict access control on URLs and features to ensure that only authorized users (Super Admins) can access sensitive functions.
-Validate user permissions on the server side before executing any action related to MFA settings.
-Regularly audit access control rules to ensure that privilege separation is correctly enforced.
+Enforce strict access control on sensitive data to ensure only authorized users (Super Admins) can access it.
+Implement proper role-based access control (RBAC) checks on all data endpoints.
+Regularly review access permissions to ensure that lower privilege users cannot access data beyond their authorization level.
