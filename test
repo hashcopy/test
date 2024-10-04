@@ -1,13 +1,13 @@
-Title: Privilege Escalation: Low Privilege User Can View Super Admin-Restricted Employer Data
-Description: A low privilege user is able to access sensitive employer data that is strictly meant for Super Admins. Due to a flaw in the access control mechanism, the user can bypass security restrictions and view all employer data, which should only be accessible to Super Admins. This results in a significant confidentiality breach, exposing critical information to unauthorized users.
+Title: Privilege Escalation: Low Privilege User Can Modify Super Admin-Restricted Employer Data
+Description: A low privilege user can not only view but also modify sensitive employer data that is strictly reserved for Super Admins. Due to insufficient access control mechanisms, the user is able to make unauthorized updates to employer details, potentially altering critical business information. This vulnerability poses a serious threat to data integrity and can lead to business disruptions or data manipulation.
 
 Impact:
 
-Exposure of sensitive employer data to lower privilege users.
-Privacy violations and potential misuse of sensitive business or personal information.
-Loss of data confidentiality and trust in the system's access control.
+Unauthorized users can modify sensitive employer data.
+Risk of data integrity loss, as business-critical information may be altered by unauthorized users.
+Potential for malicious data manipulation, which could lead to operational or financial consequences.
 Recommendation:
 
-Strengthen access control mechanisms to ensure Super Admin-restricted data is not accessible by lower privilege users.
-Implement and test role-based access control (RBAC) to enforce correct data access boundaries.
-Perform security audits to ensure no further privilege escalation vulnerabilities exist.
+Implement robust role-based access control (RBAC) to ensure that only authorized users (Super Admins) can update employer data.
+Perform thorough server-side validation of user permissions before allowing any data modification.
+Conduct regular security audits and testing to ensure that sensitive features are protected from unauthorized access.
