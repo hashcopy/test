@@ -1,5 +1,14 @@
-Title: Low Privilege User Can Create Super Admin Account
+Title: Bypassing MFA Setup Through Response Modification
+Vulnerability Type: Authentication Bypass
 
-Description: A security vulnerability was identified where a user with low-level privileges can escalate their access and create a super admin account. This leads to a significant privilege escalation issue, allowing unauthorized users to gain full control over the system. The flaw potentially results from improper access control checks on user creation functionalities, exposing the system to malicious activity.
+Description: The application allows a user to bypass the mandatory MFA (Multi-Factor Authentication) setup by altering the server's response during the login process. Although MFA is enforced by the client, it can be bypassed through manual modification of responses, allowing users to access the application without completing the MFA setup. This vulnerability undermines the security of the authentication process, leaving user accounts susceptible to unauthorized access if an attacker exploits this loophole.
 
-Recommendation: Implement strict role-based access control (RBAC) checks to ensure only authorized users can create or modify super admin accounts. Regularly audit permissions and conduct security testing to prevent unauthorized privilege escalation.
+Impact:
+
+Compromised account security due to lack of MFA enforcement.
+Increased risk of account takeover and unauthorized access.
+Recommendation:
+
+Ensure that MFA enforcement is validated on the server-side and cannot be bypassed by client-side manipulations.
+Implement strong integrity checks and server-side controls to ensure that MFA setup is mandatory before granting access to the application.
+Perform regular security testing to identify and mitigate response modification vulnerabilities.
