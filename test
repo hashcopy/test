@@ -1,12 +1,13 @@
-Title: Privilege Escalation: Low Privilege User Can View All Employer Data
-Description: A low privilege user is able to access sensitive employer data, which is meant to be restricted to Super Admins. By exploiting a vulnerability in the access control mechanism, the low privilege user can view data that should be inaccessible to them, such as personal or business details of all employers in the system. This improper privilege enforcement leads to a serious confidentiality breach.
+Title: Privilege Escalation: Low Privilege User Can View Super Admin-Restricted Employer Data
+Description: A low privilege user is able to access sensitive employer data that is strictly meant for Super Admins. Due to a flaw in the access control mechanism, the user can bypass security restrictions and view all employer data, which should only be accessible to Super Admins. This results in a significant confidentiality breach, exposing critical information to unauthorized users.
 
 Impact:
 
-Sensitive employer data, intended for Super Admin access, is exposed to lower privilege users.
-This could result in unauthorized data disclosure, privacy violations, and potential misuse of the information.
+Exposure of sensitive employer data to lower privilege users.
+Privacy violations and potential misuse of sensitive business or personal information.
+Loss of data confidentiality and trust in the system's access control.
 Recommendation:
 
-Enforce strict access control on sensitive data to ensure only authorized users (Super Admins) can access it.
-Implement proper role-based access control (RBAC) checks on all data endpoints.
-Regularly review access permissions to ensure that lower privilege users cannot access data beyond their authorization level.
+Strengthen access control mechanisms to ensure Super Admin-restricted data is not accessible by lower privilege users.
+Implement and test role-based access control (RBAC) to enforce correct data access boundaries.
+Perform security audits to ensure no further privilege escalation vulnerabilities exist.
