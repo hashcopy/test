@@ -1,14 +1,13 @@
-Title: Privilege Escalation: Low Privilege User Can Delete Super Admin-Restricted Client Data
-Description: A low privilege user is able to delete sensitive client data, a functionality that should only be accessible to Super Admins. This vulnerability allows unauthorized users to remove entire client accounts or records from the system, leading to significant data loss. The lack of proper access control on critical operations like client deletion poses a major risk to data integrity and business operations.
+Title: Inadequate Access Control: Admin Can View Another Employer's Pending Contribution Details
+Description: An admin user can access and view pending contribution details of other employers, which should be restricted to the respective employer's admin only. This improper access control leads to exposure of sensitive financial data, potentially violating data privacy policies and creating business risks.
 
 Impact:
 
-Unauthorized deletion of client data, leading to irrecoverable data loss.
-Potential disruption to business operations and damage to customer relationships.
-Risk of malicious data removal, which could lead to severe consequences for the business and clients.
+Exposure of confidential financial information related to contributions.
+Risk of privacy breaches, leading to reputational damage and compliance violations.
+Misuse of information for competitive or malicious purposes.
 Recommendation:
 
-Implement strict role-based access control (RBAC) to ensure only authorized Super Admins can perform sensitive actions such as client deletion.
-Validate user permissions at the server level before allowing critical operations to be performed.
-Add an additional layer of security (e.g., multi-factor authentication or administrative approval) for high-impact actions like data deletion.
-Perform regular security audits and penetration testing to identify and fix any privilege escalation vulnerabilities.
+Implement role-based access control (RBAC) to ensure that admins can only view data relevant to their own organization.
+Perform access control checks on all endpoints to prevent unauthorized data access.
+Conduct regular access control audits and penetration testing to detect and prevent such vulnerabilities.
