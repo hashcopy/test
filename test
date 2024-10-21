@@ -1,13 +1,24 @@
-Title: Inadequate Access Control: Admin Can View Another Employer's Pending Contribution Details
-Description: An admin user can access and view pending contribution details of other employers, which should be restricted to the respective employer's admin only. This improper access control leads to exposure of sensitive financial data, potentially violating data privacy policies and creating business risks.
+Title: Inadequate Access Control: Admin Can Create Contributions for Another Employer's Employee
+Description: An admin user can create contributions for employees belonging to other employers. This improper access control allows unauthorized actions that could result in data manipulation, incorrect financial records, and potential business conflicts. Such actions should be restricted to the respective employer's admin only to maintain data integrity and compliance.
 
 Impact:
 
-Exposure of confidential financial information related to contributions.
-Risk of privacy breaches, leading to reputational damage and compliance violations.
-Misuse of information for competitive or malicious purposes.
+Unauthorized modifications to financial records, leading to data integrity issues.
+Risk of operational disruptions and inaccurate contributions.
+Possible compliance violations due to incorrect data handling.
 Recommendation:
 
-Implement role-based access control (RBAC) to ensure that admins can only view data relevant to their own organization.
-Perform access control checks on all endpoints to prevent unauthorized data access.
-Conduct regular access control audits and penetration testing to detect and prevent such vulnerabilities.
+Implement strict role-based access control (RBAC) to ensure admins can only manage contributions for their own employees.
+Validate user permissions server-side before allowing critical operations like contribution creation.
+Monitor and log admin activities to detect unauthorized actions early and conduct regular audits of access controls.
+CVSS Calculation:
+Attack Vector (AV): Network (N)
+Attack Complexity (AC): Low (L)
+Privileges Required (PR): Low (L) (Admin role, but improper access to others' data)
+User Interaction (UI): None (N)
+Scope (S): Unchanged (U)
+Confidentiality (C): None (N) (No direct data exposure)
+Integrity (I): High (H) (Significant impact on data integrity due to unauthorized contributions)
+Availability (A): None (N) (No impact on system availability)
+CVSS Score: 6.5 (Medium)
+This score reflects the serious risk to data integrity, as unauthorized contributions can lead to financial discrepancies and compliance issues.
