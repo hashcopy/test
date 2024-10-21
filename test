@@ -22,3 +22,18 @@ Integrity (I): High (H) (Significant impact on data integrity due to unauthorize
 Availability (A): None (N) (No impact on system availability)
 CVSS Score: 6.5 (Medium)
 This score reflects the serious risk to data integrity, as unauthorized contributions can lead to financial discrepancies and compliance issues.
+
+
+Title: Business Logic Bypass: User Can Finalize Pending Contributions with Invalid Dates
+Description: A user is able to finalize pending contributions using a backdated or future date that violates the business rules. The allowed range for finalization should be no more than 8 days earlier or 20 days later than the actual payment date. This bypass compromises the business logic, potentially resulting in inaccurate records, financial mismanagement, or compliance issues.
+
+Impact:
+
+Inaccurate financial records due to invalid contribution dates.
+Potential misuse of the system, leading to financial discrepancies and audit issues.
+Breach of business rules, risking non-compliance with policies or regulations.
+Recommendation:
+
+Enforce strict date validations on the server side to ensure contributions can only be finalized within the allowed date range.
+Implement unit tests and input validation to detect and prevent such bypasses.
+Monitor logs for any suspicious date manipulations and conduct regular audits.
