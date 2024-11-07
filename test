@@ -37,3 +37,6 @@ Recommendation:
 Enforce strict date validations on the server side to ensure contributions can only be finalized within the allowed date range.
 Implement unit tests and input validation to detect and prevent such bypasses.
 Monitor logs for any suspicious date manipulations and conduct regular audits.
+
+
+A cross-system admin is able to generate reports containing data for another employer, despite not having the required access permissions. This unauthorized access allows an admin to view sensitive information about other employers, violating data isolation and privacy requirements.
