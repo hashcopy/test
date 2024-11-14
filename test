@@ -40,3 +40,13 @@ Monitor logs for any suspicious date manipulations and conduct regular audits.
 
 
 A cross-system admin is able to generate reports containing data for another employer, despite not having the required access permissions. This unauthorized access allows an admin to view sensitive information about other employers, violating data isolation and privacy requirements.
+
+
+Title:
+Unauthorized Access to Payroll Group Management by External Users
+
+Description:
+An external user, lacking permissions on the payroll group, is able to view, modify, and add new payroll groups. This access exposes sensitive payroll information and enables unauthorized modifications, potentially leading to data manipulation or misuse.
+
+Recommendation:
+Implement strict access controls to verify that only authorized users with proper permissions can view or modify payroll group data. This includes applying role-based access controls (RBAC) for payroll management and conducting periodic access reviews to ensure permissions are correctly assigned. Additionally, implement auditing mechanisms to detect unauthorized access attempts.
