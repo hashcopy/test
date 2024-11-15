@@ -50,3 +50,6 @@ An external user, lacking permissions on the payroll group, is able to view, mod
 
 Recommendation:
 Implement strict access controls to verify that only authorized users with proper permissions can view or modify payroll group data. This includes applying role-based access controls (RBAC) for payroll management and conducting periodic access reviews to ensure permissions are correctly assigned. Additionally, implement auditing mechanisms to detect unauthorized access attempts.
+
+
+The account lockout policy cannot be fully enforced through Akamai WAF alone, as WAF primarily acts as a protective layer rather than implementing application-specific logic. To effectively address this issue, the application itself must handle user account lockouts after a defined number of failed login attempts. This ensures robust enforcement of the lockout policy at the core logic level, aligning with security best practices.
