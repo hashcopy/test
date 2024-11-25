@@ -43,13 +43,31 @@ A cross-system admin is able to generate reports containing data for another emp
 
 
 Title:
-Unauthorized Access to Payroll Group Management by External Users
+Unauthorized Access to EEO Payroll Groups via Response Tampering
 
 Description:
-An external user, lacking permissions on the payroll group, is able to view, modify, and add new payroll groups. This access exposes sensitive payroll information and enables unauthorized modifications, potentially leading to data manipulation or misuse.
+An unauthorized external user can exploit response tampering to view, modify, delete, and add payroll groups in the EEO Payroll Groups functionality. This vulnerability exposes sensitive payroll information, compromises data integrity, and enables unauthorized actions, posing significant security and compliance risks.
 
 Recommendation:
-Implement strict access controls to verify that only authorized users with proper permissions can view or modify payroll group data. This includes applying role-based access controls (RBAC) for payroll management and conducting periodic access reviews to ensure permissions are correctly assigned. Additionally, implement auditing mechanisms to detect unauthorized access attempts.
+Input Validation: Validate and sanitize all user inputs and responses from the client side to prevent unauthorized modifications.
+Access Control Enforcement: Implement strict server-side authorization checks to ensure that only users with proper permissions can access or modify payroll groups.
+Token Validation: Use secure, tamper-proof session tokens to validate user permissions for each request.
+Audit Logging: Log all actions performed on payroll groups to identify unauthorized activities promptly.
+Periodic Testing: Conduct regular security testing, including response tampering scenarios, to identify and mitigate similar vulnerabilities.
+CVSS Score:
+CVSS v3.1: 8.2 (High)
 
-
-The account lockout policy cannot be fully enforced through Akamai WAF alone, as WAF primarily acts as a protective layer rather than implementing application-specific logic. To effectively address this issue, the application itself must handle user account lockouts after a defined number of failed login attempts. This ensures robust enforcement of the lockout policy at the core logic level, aligning with security best practices.
+Attack Vector (AV): Network (N)
+Attack Complexity (AC): Low (L)
+Privileges Required (PR): None (N)
+User Interaction (UI): Required (R)
+Scope (S): Unchanged (U)
+Confidentiality (C): High (H)
+Integrity (I): High (H)
+Availability (A): Low (L)
+Steps to Reproduce:
+Log in as an unauthorized external user.
+Intercept a request related to the EEO Payroll Groups functionality using a proxy tool (e.g., Burp Suite).
+Modify the intercepted response to bypass client-side restrictions.
+Add, delete, or modify payroll group data using tampered requests.
+Observe the changes in the application, confirming unauthorized access and actions.
