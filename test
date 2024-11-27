@@ -48,6 +48,9 @@ A cross-system admin is able to generate reports containing data for another emp
 }
 
 Unauthorized Access to EEO Payroll Groups via Response Tampering
+
+The EEO Payroll Groups functionality is vulnerable to response tampering, allowing an unauthorized external user to view, modify, delete, and add payroll groups. This issue occurs because the application does not enforce proper server-side authorization checks, relying instead on client-side controls. Exploiting this flaw compromises the confidentiality and integrity of payroll group data, potentially leading to unauthorized access, data manipulation, and regulatory compliance breaches.
+Implement strict server-side authorization checks to ensure that only authorized users can view, modify, delete, or add payroll groups. Enforce role-based access control (RBAC) to restrict functionality based on user roles and permissions. Validate all server responses to ensure data exposure is limited to authorized users, and use secure communication protocols (e.g., HTTPS) to prevent tampering during transmission. Additionally, enable detailed logging and monitoring to detect and respond to unauthorized activities promptly. Regularly test the application for response tampering vulnerabilities to ensure robust security.
 ----
 %PDF-1.4
 1 0 obj
