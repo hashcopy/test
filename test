@@ -183,34 +183,35 @@ startxref
 
 
 
-Title: Unauthorized Document Access: Participant User Can View Other Companies' Documents via Logo URL
-Description: The application allows participant users to view documents or images associated with other companies by manipulating the logo URL accessible after login. Since the logo is dynamically loaded for each company, inadequate access control enables users to access logos or other sensitive resources belonging to other companies.
+Title: Unauthorized Access to Employer Plan Document via FileStoreID
+Description: A participant user can access plan documents of another employer by manipulating the FileStoreID. This vulnerability arises due to insufficient access controls on file retrieval endpoints, allowing unauthorized users to access sensitive plan documents belonging to different employers.
 
 Impact:
 
-Privacy Breach: Participants can access images or documents belonging to unrelated companies.
-Data Exposure: The vulnerability could lead to the exposure of sensitive company-specific resources.
-Brand Impact: Misuse of logos or images could tarnish the reputation of affected companies.
+Privacy Breach: Unauthorized access to employer-specific plan documents can expose sensitive business details.
+Data Leakage: Proprietary or confidential information about employer plans might be leaked.
+Compliance Risks: Unauthorized access could lead to regulatory violations depending on the sensitivity of the data.
 Recommendation:
-Access Control Implementation: Enforce strict authorization checks on all resource URLs to ensure that participants can access only their assigned company’s resources.
-Tokenized URLs: Use short-lived, user-specific tokens to validate requests for sensitive resources like logos or documents.
-Resource Segmentation: Store each company's resources in separate directories or with unique identifiers to prevent unauthorized cross-access.
-Monitor and Audit Access: Log all resource access and review logs for unauthorized attempts to access other companies' resources.
+Strict Access Control: Implement robust authorization checks to ensure only intended users can access specific plan documents.
+File Ownership Validation: Validate that the requesting user is authorized to access the file associated with the FileStoreID.
+Tokenized Access: Use user-specific and short-lived tokens to secure file download URLs.
+Audit and Logging: Monitor and log file access attempts, particularly unauthorized access, for further analysis and response.
 CVSS Calculation:
 Attack Vector (AV): Network (N)
-Exploitation occurs remotely via the web interface.
+Exploitation occurs remotely by manipulating file-related parameters.
 Attack Complexity (AC): Low (L)
-The vulnerability is straightforward to exploit by manipulating the URL.
+The vulnerability is straightforward to exploit by altering the FileStoreID.
 Privileges Required (PR): Low (L)
-The attacker needs only participant-level access.
+The attacker requires only participant-level access.
 User Interaction (UI): None (N)
-No interaction from other users is needed to exploit the issue.
+The attack does not require interaction with other users.
 Scope (S): Unchanged (U)
-The issue is limited to the application and does not affect external systems.
-Confidentiality (C): Medium (M)
-Accessing unauthorized resources exposes sensitive or proprietary information.
+The vulnerability impacts the same application without affecting other systems.
+Confidentiality (C): High (H)
+Accessing sensitive plan documents exposes confidential information.
 Integrity (I): None (N)
-The vulnerability allows read-only access without data alteration.
+The vulnerability only allows read access without modification capabilities.
 Availability (A): None (N)
-There is no impact on the application's availability.
-
+There is no impact on system availability.
+CVSS Score: 6.5 (Medium)
+This score highlights the significant confidentiality risks and emphasizes the need for robust access control mechanisms to secure employer-specific resources.
