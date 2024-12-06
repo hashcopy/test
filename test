@@ -183,35 +183,35 @@ startxref
 
 
 
-Title: Unauthorized Report Generation: Participant User Can View Sensitive Employer Data
-Description: A participant user can generate reports that they are not authorized to access. This vulnerability allows the user to view sensitive details of another employer, bypassing the intended role-based access controls.
+Title: Unauthorized File Upload: Cross-Admin Can Upload Documents for Another Employer
+Description: An admin user can upload a file for an employer to which they do not have access. The uploaded file is visible in the document section of the targeted employer’s admin and participant portals. This vulnerability allows admins to inject unauthorized files into other employers' environments, violating data integrity and access policies.
 
 Impact:
 
-Data Exposure: Unauthorized access to sensitive employer data, such as financials or employee information, can lead to data breaches.
-Privacy Violations: Employer-specific details being accessed by an unauthorized user breach confidentiality agreements.
-Compliance Issues: Accessing sensitive data without authorization may violate data protection regulations.
+Data Integrity Breach: Unauthorized file uploads compromise the integrity of the employer's document repository.
+Privacy Violation: Uploaded files become visible to unauthorized participants and admins of the targeted employer.
+Trust and Compliance Issues: Such incidents can damage trust and lead to non-compliance with data protection regulations.
 Recommendation:
-Role-Based Access Control (RBAC): Implement strict RBAC to ensure that report generation is restricted based on the user's role.
-Access Validation: Validate the requesting user’s permissions before processing report generation requests.
-Audit and Monitoring: Log report generation activities, especially any unauthorized attempts, and review them regularly.
-Error Messaging: Provide appropriate error messages to unauthorized users instead of exposing sensitive details.
+Access Control Validation: Ensure admins can upload files only for employers they are authorized to manage.
+Ownership Verification: Validate that the uploading admin belongs to the same employer as the target document repository.
+Audit and Logging: Maintain logs of all file uploads and flag suspicious cross-employer activities for review.
+Error Handling: Return clear error messages when an unauthorized file upload attempt is detected.
 CVSS Calculation:
 Attack Vector (AV): Network (N)
-Exploitation occurs remotely through the application.
+Exploitation occurs via the web interface.
 Attack Complexity (AC): Low (L)
-The issue is easy to exploit as it does not require advanced technical skills.
+The attack requires simple manipulation of file upload parameters.
 Privileges Required (PR): Low (L)
-The attacker needs only participant-level access to generate unauthorized reports.
+The attacker needs admin-level access, but not for the targeted employer.
 User Interaction (UI): None (N)
-The attack does not require any interaction with other users.
+No interaction with other users is required to exploit the vulnerability.
 Scope (S): Unchanged (U)
 The vulnerability is confined to the same application.
-Confidentiality (C): High (H)
-Accessing unauthorized reports exposes sensitive employer data.
-Integrity (I): None (N)
-The vulnerability only allows viewing data, not modifying it.
+Confidentiality (C): Medium (M)
+Unauthorized files could expose sensitive or misleading information.
+Integrity (I): High (H)
+Cross-admin uploads directly affect the integrity of the document repository.
 Availability (A): None (N)
-Report generation does not affect application availability.
-CVSS Score: 6.5 (Medium)
-This score reflects the significant confidentiality risks posed by unauthorized report generation and emphasizes the importance of role-based access control.
+The issue does not impact system availability.
+CVSS Score: 7.1 (High)
+This score reflects the significant integrity risks and the need for strict access controls to prevent unauthorized file uploads.
