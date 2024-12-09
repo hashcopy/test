@@ -182,20 +182,18 @@ startxref
 
 
 
-
-Title: Unauthorized Functionality Update: Cross-Admin Can Modify Another Employer’s Data via Import File
-Description: An admin user can upload an import file to update the functionality or data of an employer for which they do not have authorized access. This vulnerability allows admins to manipulate critical settings or data of other employers, bypassing role-based access controls.
+Title: Unauthorized Access: Cross-Admin Can View Sensitive Data of Imported Files for Another Employer
+Description: An admin user can access and view sensitive data from imported files belonging to employers they are not authorized to manage. This vulnerability exposes confidential information contained in import files, bypassing access control mechanisms.
 
 Impact:
 
-Data Integrity Breach: Unauthorized updates can corrupt or alter another employer’s settings or data.
-Privacy Violation: Sensitive data related to other employers can be exposed during the import process.
-Operational Risk: Alterations to critical configurations can disrupt the functionality of the affected employer's operations.
-Compliance Risks: Unauthorized data manipulation may lead to violations of industry regulations.
+Privacy Breach: Sensitive data, such as employee details or operational configurations, can be accessed by unauthorized admins.
+Data Leakage: Confidential employer-specific information could be exposed or misused.
+Compliance Violation: Accessing unauthorized sensitive data may lead to violations of data protection regulations.
 Recommendation:
-Strict Role-Based Access Control (RBAC): Ensure admins can import files only for employers they are authorized to manage.
-File Validation: Verify that the data within the import file corresponds to the admin's authorized employer before processing the update.
-Ownership Verification: Validate that the importing admin belongs to the same employer as the target functionality.
-Audit and Monitoring: Maintain logs of all import activities and flag suspicious cross-employer updates for review.
-Error Handling: Provide clear error messages for unauthorized import attempts.
+Access Control Enforcement: Ensure admins can view imported file data only for employers they are authorized to manage.
+Ownership Validation: Validate the employer associated with the import file against the admin's permissions before granting access.
+Data Segmentation: Store import files in employer-specific, secured directories to prevent cross-access.
+Audit and Monitoring: Log all access attempts to imported file data and flag unauthorized access for investigation.
+Error Messaging: Return appropriate error messages for unauthorized access attempts instead of exposing data.
 
