@@ -182,18 +182,40 @@ startxref
 
 
 
-Title: Unauthorized Access: Cross-Admin Can View Sensitive Data of Imported Files for Another Employer
-Description: An admin user can access and view sensitive data from imported files belonging to employers they are not authorized to manage. This vulnerability exposes confidential information contained in import files, bypassing access control mechanisms.
+Title: Unauthorized Deletion: Cross-Admin Can Delete Vesting Schedule of Another Employer
+Description: An admin user can delete the vesting schedule of an employer they are not authorized to manage. This vulnerability allows unauthorized modifications to critical employer data, bypassing access controls and violating data integrity policies.
 
 Impact:
 
-Privacy Breach: Sensitive data, such as employee details or operational configurations, can be accessed by unauthorized admins.
-Data Leakage: Confidential employer-specific information could be exposed or misused.
-Compliance Violation: Accessing unauthorized sensitive data may lead to violations of data protection regulations.
+Data Integrity Breach: Unauthorized deletion of vesting schedules disrupts employer-specific financial planning and compliance.
+Operational Impact: Employers may face delays or errors in processing employee benefits due to missing schedules.
+Trust and Compliance Risks: Such unauthorized actions may lead to loss of trust and regulatory non-compliance.
 Recommendation:
-Access Control Enforcement: Ensure admins can view imported file data only for employers they are authorized to manage.
-Ownership Validation: Validate the employer associated with the import file against the admin's permissions before granting access.
-Data Segmentation: Store import files in employer-specific, secured directories to prevent cross-access.
-Audit and Monitoring: Log all access attempts to imported file data and flag unauthorized access for investigation.
-Error Messaging: Return appropriate error messages for unauthorized access attempts instead of exposing data.
+Access Control Enforcement: Implement strict authorization checks to ensure only authorized admins can manage vesting schedules for their employers.
+Ownership Validation: Verify that the admin requesting the action belongs to the same employer as the targeted vesting schedule.
+Audit and Monitoring: Maintain logs of all deletion activities and flag unauthorized attempts for investigation.
+Role-Based Restrictions: Restrict critical actions like deleting vesting schedules to authorized super admins or employer-specific admins only.
+Error Handling: Provide clear error messages when unauthorized deletion attempts are made.
 
+
+Title: Unauthorized Modification: Cross-Admin Can Edit Vesting Schedule of Another Employer
+Description: An admin user can edit the vesting schedule of an employer for which they do not have access. This vulnerability allows unauthorized admins to manipulate critical financial data, bypassing role-based access controls.
+
+Impact:
+
+Data Integrity Breach: Unauthorized edits to vesting schedules can disrupt employer-specific financial records.
+Operational Impact: Altered schedules may lead to incorrect benefit calculations or processing errors.
+Trust and Compliance Risks: Manipulation of sensitive data could violate regulatory standards and erode trust.
+Recommendation:
+Access Control Enforcement: Ensure strict access controls are in place to prevent unauthorized admins from editing vesting schedules.
+Ownership Verification: Validate the requesting admin's permissions against the target employer before allowing any edits.
+Audit and Monitoring: Maintain detailed logs of all modifications to vesting schedules and review suspicious changes.
+Role-Based Restrictions: Limit editing permissions to authorized super admins or employer-specific admins.
+Error Handling: Implement clear error responses for unauthorized edit attempts.
+CVSS Calculation:
+Attack Vector (AV): Network (N)
+Exploitation is performed remotely via the application interface.
+Attack Complexity (AC): Low (L)
+The attack requires minimal technical knowledge and can be executed easily.
+Privileges Required (PR): Low (L)
+The attacker needs admin access but not for the targeted employer.
