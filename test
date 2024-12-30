@@ -1,1 +1,11 @@
-test
+Title: Improper Server-Side Validation Allows Unauthorized Modification of Contribution Date
+Description:
+An issue was identified where the "Contribution Date" field, intended to be immutable after submission, can be manipulated by intercepting and modifying the request before it is processed by the server. Despite the user interface enforcing restrictions on this field, the server does not validate or enforce these constraints, allowing attackers to modify the contribution date to arbitrary values.
+
+This vulnerability could be exploited to tamper with contribution records, potentially leading to discrepancies in financial or compliance systems, undermining data integrity and trust.
+
+Recommendation:
+To mitigate this issue, implement robust server-side validation to ensure that the "Contribution Date" cannot be modified once it is submitted. Specifically:
+
+Server-Side Validation: Validate all incoming requests to ensure the "Contribution Date" matches the expected, unmodifiable value.
+Audit Logging: Log all requests that attempt to modify immutable fields to detect suspicious activity.
