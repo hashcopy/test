@@ -1,18 +1,39 @@
-Title: Business Logic Bypass Enables Unauthorized Modification of Contribution Date via Request Interception
+Title: Business Logic Bypass Allows Modification of Non-Editable Contribution Date via Request Manipulation
 Description:
-The application suffers from a business logic flaw that allows unauthorized modification of the contribution date field through request manipulation. Although the contribution date is intentionally non-editable in the user interface, attackers can intercept and modify the API request using tools like Burp Suite to assign an arbitrary date to contributions.
+The application contains a business logic flaw that permits modification of the contribution date, a field explicitly marked as non-editable in the user interface. By intercepting and manipulating API requests using tools such as Burp Suite, an attacker can alter the contribution date to arbitrary values.
 
-This vulnerability stems from inadequate validation of critical fields on the server side. As a result, users can bypass the intended business logic, leading to potential data inconsistencies, fraudulent entries, and abuse of system workflows.
+This vulnerability results from inadequate server-side enforcement of immutability for sensitive fields. While the user interface prevents changes, the server does not validate the immutability of the contribution date when processing requests. This discrepancy between the client-side controls and server-side validation allows attackers to bypass business logic restrictions.
 
+Impact:
+
+Data Integrity Compromise: Unauthorized changes to the contribution date can misrepresent historical records.
+Fraudulent Activity: Attackers could potentially exploit this flaw to falsify contribution timelines for financial or reputational gains.
+Loss of Trust: The lack of robust controls over critical data undermines user confidence in the system's reliability.
+Steps to Reproduce:
+Navigate to the feature or section of the application where the contribution date is displayed.
+Observe that the field is non-editable in the user interface.
+Intercept the request using a proxy tool like Burp Suite when performing an action related to contributions.
+Modify the contribution_date parameter in the intercepted request to a different value.
+Forward the modified request to the server.
+Verify that the contribution date has been updated to the manipulated value, despite being marked as non-editable in the UI.
 Recommendation:
-Enforce Strong Server-Side Validation: Ensure that the server validates all incoming requests, especially for fields that are not editable in the user interface, to confirm compliance with business rules.
+Enforce Server-Side Immutability:
 
-Mark Immutable Fields as Non-Editable: For fields like the contribution date that are not intended to be changed, implement controls to reject any client-side or intercepted attempts to modify them.
+Implement strict server-side checks to ensure that non-editable fields like the contribution date cannot be modified, regardless of client-side behavior.
+Reject any requests containing updates to such fields with an appropriate error response.
+Consistent Validation Across Layers:
 
-Implement Endpoint Restrictions: Design API endpoints to align with the application's intended functionality. Disallow any field modifications that are not explicitly permitted by the business logic.
+Align client-side and server-side controls by validating critical fields in both layers to prevent inconsistencies.
+Harden API Endpoints:
 
-Audit Requests for Anomalies: Track all requests and identify unauthorized attempts to manipulate sensitive fields. These logs should be monitored regularly to detect and prevent misuse.
+Design API endpoints to explicitly disallow modifications to immutable fields.
+Employ a whitelist of permissible changes for each request to ensure that unintended fields cannot be altered.
+Audit Logging and Monitoring:
 
-Perform Regular Business Logic Testing: Incorporate testing for business logic bypass vulnerabilities during development and security assessments to identify similar issues proactively.
+Implement detailed logging for all API interactions, capturing field modifications and user actions.
+Monitor logs for unauthorized attempts to alter immutable fields and raise alerts for suspicious activity.
+Penetration Testing for Business Logic Flaws:
 
-Addressing these recommendations will reinforce the application's business rules and prevent users from bypassing restrictions, thereby maintaining the integrity and reliability of the system.
+Include business logic validation in routine security assessments to proactively identify and remediate similar issues.
+Conclusion:
+By addressing this business logic bypass, the application will ensure that non-editable fields remain immutable, protecting data integrity and maintaining the trust of its users.
