@@ -10,3 +10,34 @@ fetch('https://example.com/data', {
   .then(response => response.json()) // Use response.text() if the response isn't JSON
   .then(data => console.log(data))
   .catch(error => console.error('Error:', error));
+
+fetch("https://target.com/api", {
+  method: "GET",
+  headers: {
+    "Sec-Fetch-Site": "same-origin",  
+    "Sec-Fetch-Mode": "cors",
+    "Sec-Fetch-Dest": "empty",
+    "User-Agent": navigator.userAgent
+  },
+  credentials: "include"
+})
+.then(response => response.text())
+.then(console.log)
+.catch(console.error);
+
+
+
+console.log({
+  userAgent: navigator.userAgent,
+  platform: navigator.platform,
+  language: navigator.language,
+  hardwareConcurrency: navigator.hardwareConcurrency,
+  deviceMemory: navigator.deviceMemory,
+  webglRenderer: (() => {
+    var canvas = document.createElement('canvas');
+    var gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+    if (!gl) return "Not Supported";
+    var debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+    return debugInfo ? gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) : "Unknown";
+  })()
+});
