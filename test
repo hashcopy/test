@@ -41,3 +41,29 @@ console.log({
     return debugInfo ? gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) : "Unknown";
   })()
 });
+
+import requests
+
+# Burp Proxy Settings
+proxies = {
+    "http": "http://127.0.0.1:8080",
+    "https": "http://127.0.0.1:8080",
+}
+
+# Custom Headers (Mimic Chrome Incognito)
+headers = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+    "Sec-CH-UA": "\"Google Chrome\";v=\"120\", \"Not A;Brand\";v=\"99\", \"Chromium\";v=\"120\"",
+    "Sec-CH-UA-Mobile": "?0",
+    "Sec-CH-UA-Platform": "\"Windows\"",
+    "Sec-Fetch-Site": "same-origin",
+    "Sec-Fetch-Mode": "cors",
+    "Sec-Fetch-Dest": "empty"
+}
+
+# Send the request through Burp
+response = requests.get("https://target.com/api", headers=headers, proxies=proxies, verify=False)
+
+# Print the response
+print(response.text)
+
