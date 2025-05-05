@@ -260,3 +260,31 @@ def handleResponse(req, interesting):
     print(req.status, req.responseLength)
 
 
+
+edit
+from javax.crypto import Cipher
+from javax.crypto.spec import SecretKeySpec, IvParameterSpec
+from java.lang import String
+from java.util import Base64
+
+def aes_encrypt(data, key, iv):
+    key_spec = SecretKeySpec(key.encode('utf-8'), "AES")
+    iv_spec = IvParameterSpec(iv.encode('utf-8'))
+    cipher = Cipher.getInstance("AES/CBC/PKCS5Padding")
+    cipher.init(Cipher.ENCRYPT_MODE, key_spec, iv_spec)
+    return cipher.doFinal(data)
+
+def aes_decrypt(enc_data, key, iv):
+    key_spec = SecretKeySpec(key.encode('utf-8'), "AES")
+    iv_spec = IvParameterSpec(iv.encode('utf-8'))
+    cipher = Cipher.getInstance("AES/CBC/PKCS5Padding")
+    cipher.init(Cipher.DECRYPT_MODE, key_spec, iv_spec)
+    return cipher.doFinal(enc_data)
+
+
+def hex_to_bytes(hex_str):
+    return bytearray.fromhex(hex_str)
+
+def bytes_to_hex(byte_array):
+    return ''.join(format(x, '02x') for x in byte_array)
+
