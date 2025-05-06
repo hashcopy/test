@@ -1,0 +1,94 @@
+
+from javax.crypto import Cipher
+from javax.crypto.spec import SecretKeySpec, IvParameterSpec
+from java.util import Base64
+import array
+
+def get_key_bytes(key_str):
+    return key_str.encode("utf-8")
+
+def get_iv_bytes(iv_str):
+    return iv_str.encode("utf-8")
+
+def java_array_to_str(byte_array):
+    return ''.join([chr(b if b >= 0 else b + 256) for b in byte_array])
+
+def encrypt(data, key_str, iv_str, mode_str):
+    key_bytes = get_key_bytes(key_str)
+    iv_bytes = get_iv_bytes(iv_str)
+    
+    secret_key = SecretKeySpec(key_bytes, "AES")
+    
+    if mode_str == "AES/CBC/PKCS5Padding":
+        cipher = Cipher.getInstance("AES/CBC/PKCS5Padding")
+        cipher.init(Cipher.ENCRYPT_MODE, secret_key, IvParameterSpec(iv_bytes))
+    elif mode_str == "AES/ECB/PKCS5Padding":
+        cipher = Cipher.getInstance("AES/ECB/PKCS5Padding")
+        cipher.init(Cipher.ENCRYPT_MODE, secret_key)
+    else:
+        raise ValueError("Unsupported mode")
+        
+    return cipher.doFinal(data)
+
+def decrypt(data, key_str, iv_str, mode_str):
+    key_bytes = get_key_bytes(key_str)
+    iv_bytes = get_iv_bytes(iv_str)
+    secret_key = SecretKeySpec(key_bytes, "AES")
+
+    if mode_str == "AES/CBC/PKCS5Padding":
+        cipher = Cipher.getInstance("AES/CBC/PKCS5Padding")
+        cipher.init(Cipher.DECRYPT_MODE, secret_key, IvParameterSpec(iv_bytes))
+    elif mode_str == "AES/ECB/PKCS5Padding":
+        cipher = Cipher.getInstance("AES/ECB/PKCS5Padding")
+        cipher.init(Cipher.DECRYPT_MODE, secret_key)
+    else:
+        raise ValueError("Unsupported mode")
+   
+
+    decrypted = cipher.doFinal(data)
+    return decrypted
+
+def bytes_to_hex(byte_arr):
+    return ''.join('{:02x}'.format((b + 256) % 256) for b in byte_arr)
+
+def hex_to_bytes(hex_str):
+    #return bytes([int(hex_str[i:i+2], 16) for i in range(0, len(hex_str), 2)])
+    return ''.join([chr(int(hex_str[i:i+2], 16)) for i in range(0, len(hex_str), 2)])
+
+def encode(payload):
+    key = "58945803628475210256298743257410"  # 32-byte key
+    iv = "2578018473365974"                  # 16-byte IV
+    mode = "AES/CBC/PKCS5Padding"
+
+    encrypted = encrypt(payload, key, iv, mode)
+    return bytes_to_hex(encrypted)
+
+def decode(payload):
+    key = "2342432"  # 32-byte key
+    iv = "24242"                  # 16-byte IV
+    mode = "AES/CBC/PKCS5Padding"
+
+    encrypted_bytes = hex_to_bytes(payload)
+    decrypted = decrypt(encrypted_bytes, key, iv, mode)
+    return decrypted
+
+def queueRequests(target, wordlists):
+    engine = RequestEngine(endpoint=target.endpoint,
+                           concurrentConnections=1,
+                           requestsPerConnection=1,
+                           pipeline=False,
+                           engine=Engine.THREADED
+                           )
+
+    #for x in range(10, 20):
+     #   engine.queue(target.req, x)
+
+    for word in open('C:/Users/Username/Downloads/testburp.txt'):
+        data = "mobilenumber1={}&token=322434.3234".format(word.rstrip())
+        enc_data = encode(data)
+        print("decrypted = ", java_array_to_str(decode(enc_data)).decode('utf-8'))      
+        engine.queue(target.req, enc_data)
+
+
+def handleResponse(req, interesting):
+    table.add(req)
