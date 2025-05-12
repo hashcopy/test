@@ -422,3 +422,73 @@ editing websocket--------------
 
 })();
 
+
+--------------------editing websocket-------------------
+(function () {
+    // Replace this with the actual WebSocket URL you want to connect to
+    const wsUrl = "ws://example.com/socket"; // change to your WebSocket URL
+
+    // Create the WebSocket connection
+    const ws = new WebSocket(wsUrl);
+
+    // Convert hex string to Uint8Array
+    function hexToUint8Array(hex) {
+        const bytes = new Uint8Array(hex.length / 2);
+        for (let i = 0; i < hex.length; i += 2) {
+            bytes[i / 2] = parseInt(hex.substr(i, 2), 16);
+        }
+        return bytes;
+    }
+
+    // Convert ArrayBuffer to hex string
+    function bufferToHex(buffer) {
+        const bytes = new Uint8Array(buffer);
+        return Array.from(bytes)
+            .map(b => b.toString(16).padStart(2, "0"))
+            .join("");
+    }
+
+    // Function to send hex payload
+    window.sendHex = function (hex) {
+        if (!ws || ws.readyState !== WebSocket.OPEN) {
+            console.error("WebSocket is not open.");
+            return;
+        }
+        const binary = hexToUint8Array(hex);
+        ws.send(binary);
+        console.log(`[⇒ Sent Hex] ${hex}`);
+    };
+
+    // Add listener for incoming WebSocket messages
+    ws.binaryType = "arraybuffer";
+    ws.addEventListener("message", (e) => {
+        const buffer = e.data instanceof ArrayBuffer
+            ? e.data
+            : new TextEncoder().encode(e.data).buffer;
+
+        const text = new TextDecoder().decode(buffer);
+        const hex = bufferToHex(buffer);
+
+        console.log("[⇐ Received]");
+        console.log("  • Text:", text);
+        console.log("  • Hex: ", hex);
+    });
+
+    // Handle WebSocket open event
+    ws.addEventListener("open", () => {
+        console.log("[✓] WebSocket connection established.");
+    });
+
+    // Handle WebSocket error event
+    ws.addEventListener("error", (err) => {
+        console.error("[✖] WebSocket error:", err);
+    });
+
+    // Handle WebSocket close event
+    ws.addEventListener("close", () => {
+        console.log("[✖] WebSocket connection closed.");
+    });
+
+    console.log("[✓] WebSocket connected. Use sendHex(\"deadbeef\") to send payloads.");
+})();
+
