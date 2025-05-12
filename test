@@ -348,3 +348,23 @@ def handleResponse(req, interesting):
     # Replace the encrypted string in the request
     new_request = original.replace(encrypted_hex, re_encrypted)
     req.setRaw(new_request)
+
+
+Hex websocket------------------
+function hexToUint8Array(hex) {
+    if (hex.length % 2 !== 0) {
+        throw new Error("Invalid hex string");
+    }
+    const array = new Uint8Array(hex.length / 2);
+    for (let i = 0; i < hex.length; i += 2) {
+        array[i / 2] = parseInt(hex.substr(i, 2), 16);
+    }
+    return array;
+}
+const socket = new WebSocket("ws://example.com/socket");
+
+socket.addEventListener("open", () => {
+    const hexData = "48656c6c6f"; // "Hello" in hex
+    const binaryData = hexToUint8Array(hexData);
+    socket.send(binaryData);
+});
