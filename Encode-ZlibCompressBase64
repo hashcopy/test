@@ -1,0 +1,24 @@
+# Read the decompressed data from the file
+import urllib.parse
+import base64
+import zlib
+
+input_path = "C:/Users/username/Downloads/burptest.bin"
+with open(input_path, "rb") as f:
+    original_data = f.read()
+
+# Step 1: Compress using zlib
+compressed_data = zlib.compress(original_data)
+
+# Step 2: Base64 encode
+base64_encoded = base64.b64encode(compressed_data)
+
+# Step 3: URL encode
+url_encoded = urllib.parse.quote(base64_encoded, safe='')
+
+# Write the final encoded string to a new file
+encoded_output_path = "C:/Users/Username/Downloads/burptest.txt"
+with open(encoded_output_path, "w") as f:
+    f.write(url_encoded)
+
+encoded_output_path
