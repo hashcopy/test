@@ -1,0 +1,28 @@
+import urllib.parse
+import base64
+import zlib
+
+# URL-encoded input
+encoded_input = ("encodedString")
+
+# Step 1: URL decode
+url_decoded = urllib.parse.unquote(encoded_input)
+
+# Step 2: Base64 decode
+base64_decoded = base64.b64decode(url_decoded)
+
+# Step 3: zlib decompress
+try:
+    decompressed = zlib.decompress(base64_decoded)
+    decompressed_text = decompressed.decode('utf-8', errors='replace')
+except Exception as e:
+    decompressed_text = f"Error during decompression: {e}"
+
+#decompressed_text[:3000]  # Show the beginning of the decompressed content
+
+print(decompressed_text)
+output_path = "C:/Users/username/Downloads/insecureDe.bin"
+with open(output_path, "wb") as f:
+    f.write(decompressed)
+
+output_path
